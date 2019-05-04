@@ -1,0 +1,74 @@
+<h1>Create an Order</h1>
+<h2>One step to a delicious meal!</h2>
+<a class="backButton" href="/orders/all">Back</a>
+<hr />
+
+
+<table id="ordersListTable">
+    <tr>
+        <th>Pizza</th>
+        <th>Ingredients</th>
+        <th>Price</th>
+        <th>Is vegetarian</th>
+        <th>Is vegan</th>
+    </tr>
+    <tr id="noOrdersMessage">
+        <td colspan="5">You have no orders, please create one!</td>
+    </tr>
+</table>
+
+<div class="formWrapper">
+  <form id="ordersCreate" action="/api/orders" method="POST">
+    <div class="formError"></div>
+    <div class="inputWrapper">
+      <div class="inputLabel">Pizza</div>
+      <select name="protocol">
+          <option value="THE REUBEN" selected>THE REUBEN</option>
+          <option value="https">https://</option>
+          <option value="BUFFALO CHICKEN">BUFFALO CHICKEN</option>
+          <option value="https">https://</option>
+      </select>
+    </div>
+    <div class="inputWrapper">
+      <div class="inputLabel">URL (not including protocol)</div>
+      <input type="text" name="url" placeholder="mywebsite.com/my/path" />
+    </div>
+
+    <div class="inputWrapper">
+      <div class="inputLabel">Success Codes (HTTP codes that should represent "up")</div>
+      <div class="checkboxGroup">
+          <input type="checkbox" class="multiselect intval" name="successCodes" value="200" checked>THE REUBEN
+          <input type="checkbox" class="multiselect intval" name="successCodes" value="201" checked>BUFFALO CHICKEN
+          <input type="checkbox" class="multiselect intval" name="successCodes" value="301">VEGGIE’S VICTORY
+          <input type="checkbox" class="multiselect intval" name="successCodes" value="302">CARROT CRAZE
+      </div>
+    </div>
+
+
+    <div class="inputWrapper">
+      <div class="inputLabel">HTTP Method</div>
+      <select name="pizzaName">
+        <option value="post">POST</option>
+        <option value="get" selected>GET</option>
+        <option value="put">PUT</option>
+        <option value="delete">DELETE</option>
+      </select>
+    </div>
+
+    <div class="inputWrapper">
+      <div class="inputLabel">Timeout</div>
+      <select class="intval" name="timeoutSeconds">
+        <option value="1">1 second</option>
+        <option value="2">2 seconds</option>
+        <option value="3">3 seconds</option>
+        <option value="4">4 seconds</option>
+        <option value="5">5 seconds</option>
+      </select>
+    </div>
+
+
+    <div class="inputWrapper ctaWrapper">
+      <button type="submit" class="cta green">Create Order</button>
+    </div>
+  </form>
+</div>
