@@ -519,21 +519,24 @@ app.loadOrdersListPage = function () {
                         app.client.request(undefined, 'api/orders', 'GET', newQueryStringObject, undefined, function (statusCode, responsePayload) {
                             if (statusCode == 200) {
                                 var orderData = responsePayload;
+
                                 // Make the order data into a table row
                                 var table = document.getElementById("ordersListTable");
                                 var tr = table.insertRow(-1);
                                 tr.classList.add('orderRow');
+
                                 var td0 = tr.insertCell(0);
                                 var td1 = tr.insertCell(1);
                                 var td2 = tr.insertCell(2);
                                 var td3 = tr.insertCell(3);
                                 var td4 = tr.insertCell(4);
-                                td0.innerHTML = element.pizzaName;
-                                td1.innerHTML = responsePayload.protocol + '://';
-                                td2.innerHTML = responsePayload.url;
-                                var state = typeof (responsePayload.state) == 'string' ? responsePayload.state : 'unknown';
-                                td3.innerHTML = state;
+
+                                td0.innerHTML = new Date(element.orderId).toLocaleString();
+                                td1.innerHTML = element.items.map(item => item.pizzaName + ' * ' + item.amount).join(', ');
+                                td2.innerHTML = element.totalPrice == undefined ? null : element.totalPrice;
+                                td3.innerHTML = typeof (element.paid) == 'boolean' ? (element.paid ? 'paid' : 'unpaid') : 'unknown';
                                 td4.innerHTML = '<a href="/orders/edit?id=' + responsePayload.id + '">View / Edit / Delete</a>';
+
                             } else {
                                 console.log("Error trying to load order ID: ", element.orderId);
                             }
@@ -562,6 +565,31 @@ app.loadOrdersListPage = function () {
         app.logUserOut();
     }
 };
+
+app.tableCreate = function (orderData) {
+
+    var body = document.getElementsByTagName('body')[0];
+    var tbl = document.createElement('table');
+    tbl.style.width = '100%';
+    tbl.setAttribute('border', '1');
+    var tbdy = document.createElement('tbody');
+    for (var i = 0; i < 3; i++) {
+        var tr = document.createElement('tr');
+        for (var j = 0; j < 2; j++) {
+            if (i == 2 && j == 1) {
+                break
+            } else {
+                var td = document.createElement('td');
+                td.appendChild(document.createTextNode('\u0020'))
+                i == 1 && j == 1 ? td.setAttribute('rowSpan', '2') : null;
+                tr.appendChild(td)
+            }
+        }
+        tbdy.appendChild(tr);
+    }
+    tbl.appendChild(tbdy);
+    body.appendChild(tbl)
+}
 
 // Load the orders edit page specifically
 app.loadOrdersEditPage = function(){
