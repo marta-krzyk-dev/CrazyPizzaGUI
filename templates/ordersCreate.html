@@ -3,7 +3,6 @@
 <a class="backButton" href="/orders/all">Back</a>
 <hr />
 
-
 <table id="ordersListTable">
     <tr>
         <th>Pizza</th>
@@ -11,64 +10,98 @@
         <th>Price</th>
         <th>Is vegetarian</th>
         <th>Is vegan</th>
+        <th>Amount</th>
     </tr>
-    <tr id="noOrdersMessage">
-        <td colspan="5">You have no orders, please create one!</td>
+    <tr>
+        <td>THE REUBEN</td>
+        <td>1000 island dressing, canadian bacon, sauerkraut, mozzarella</td>
+        <td>35.55{global.currencySign}</td>
+        <td><input type="checkbox" disabled="disabled"></td>
+        <td><input type="checkbox" disabled="disabled"></td>
+        <td><input type="number" name="quantity" min="0" max="{global.maxAmountPerOrderItem}" value="0"></td>
+    </tr>
+    <tr>
+        <td>BUFFALO CHICKEN</td>
+        <td>hot sauce, grilled chicken, onion, mozzarella, cheddar</td>
+        <td>30.50{global.currencySign}</td>
+        <td><input type="checkbox" disabled="disabled"></td>
+        <td><input type="checkbox" disabled="disabled"></td>
+        <td><input type="number" name="quantity" min="0" max="{global.maxAmountPerOrderItem}" value="0"></td>
+    </tr>
+    <tr>
+        <td>VEGGIE&#39;S VICTORY</td>
+        <td>hot sauce, grilled chicken, onion, mozzarella, cheddar</td>
+        <td>28.55{global.currencySign}</td>
+        <td><input type="checkbox" disabled="disabled" checked="checked"></td>
+        <td><input type="checkbox" disabled="disabled"></td>
+        <td><input type="number" name="quantity" min="0" max="{global.maxAmountPerOrderItem}" value="0"></td>
+    </tr>
+    <tr>
+        <td>CARROT CRAZE</td>
+        <td>sliced carrot, mushroom, pickles, green pepper, tomato, black olive, smoked chick peas</td>
+        <td>19.99{global.currencySign}</td>
+        <td><input type="checkbox" disabled="disabled" checked="checked"></td>
+        <td><input type="checkbox" disabled="disabled" checked="checked"></td>
+        <td><input type="number" name="quantity" min="0" max="{global.maxAmountPerOrderItem}" value="0"></td>
     </tr>
 </table>
 
 <div class="formWrapper">
-  <form id="ordersCreate" action="/api/orders" method="POST">
-    <div class="formError"></div>
-    <div class="inputWrapper">
-      <div class="inputLabel">Pizza</div>
-      <select name="protocol">
-          <option value="THE REUBEN" selected>THE REUBEN</option>
-          <option value="https">https://</option>
-          <option value="BUFFALO CHICKEN">BUFFALO CHICKEN</option>
-          <option value="https">https://</option>
-      </select>
-    </div>
-    <div class="inputWrapper">
-      <div class="inputLabel">URL (not including protocol)</div>
-      <input type="text" name="url" placeholder="mywebsite.com/my/path" />
-    </div>
+    <form id="ordersCreate" action="/api/orders" method="POST">
+        <div class="formError"></div>
+        <div class="inputWrapper">
+            <div class="inputLabel">Pizza</div>
+            <select name="pizzaId">
+                <option value="1" selected>THE REUBEN</option>
+                <option value="2">BUFFALO CHICKEN</option>
+                <option value="3">VEGGIE&#39;S VICTORY</option>
+                <option value="4">CARROT CRAZE</option>
+            </select>
+        </div>
 
-    <div class="inputWrapper">
-      <div class="inputLabel">Success Codes (HTTP codes that should represent "up")</div>
-      <div class="checkboxGroup">
-          <input type="checkbox" class="multiselect intval" name="successCodes" value="200" checked>THE REUBEN
-          <input type="checkbox" class="multiselect intval" name="successCodes" value="201" checked>BUFFALO CHICKEN
-          <input type="checkbox" class="multiselect intval" name="successCodes" value="301">VEGGIE’S VICTORY
-          <input type="checkbox" class="multiselect intval" name="successCodes" value="302">CARROT CRAZE
-      </div>
-    </div>
+        <!--<div class="inputWrapper">
+            <input type="text" name="id" hidden="hidden" />
+        </div>-->
 
+        <div class="inputWrapper">
+            <div class="inputLabel">URL (not including protocol)</div>
+            <input type="text" name="url" />
+        </div>
+        <div class="inputWrapper">
+            <div class="inputLabel">Success Codes (HTTP codes that should represent "up")</div>
+            <div class="checkboxGroup">
+                <input type="checkbox" class="multiselect intval" name="successCodes" value="200" checked>THE REUBEN
+                <input type="checkbox" class="multiselect intval" name="successCodes" value="201">BUFFALO CHICKEN
+                <input type="checkbox" class="multiselect intval" name="successCodes" value="301">VEGGIE’S VICTORY
+                <input type="checkbox" class="multiselect intval" name="successCodes" value="302">CARROT CRAZE
+            </div>
+        </div>
+        <div class="inputWrapper">
+            <div class="inputLabel">HTTP Method</div>
+            <select name="pizzaName">
+                <option value="post">POST</option>
+                <option value="get" selected>GET</option>
+                <option value="put">PUT</option>
+                <option value="delete">DELETE</option>
+            </select>
+        </div>
+        <div class="inputWrapper">
+            <div class="inputLabel">Timeout</div>
+            <select class="intval" name="timeoutSeconds">
+                <option value="1">1 second</option>
+                <option value="2">2 seconds</option>
+                <option value="3">3 seconds</option>
+                <option value="4">4 seconds</option>
+                <option value="5">5 seconds</option>
+            </select>
+        </div>
+        <div class="inputWrapper">
+            <div class="inputLabel">Amount</div>
+            <input type="number" name="amount" min="0" max="{global.maxAmountPerOrderItem}" value="0"> 
+        </div>
 
-    <div class="inputWrapper">
-      <div class="inputLabel">HTTP Method</div>
-      <select name="pizzaName">
-        <option value="post">POST</option>
-        <option value="get" selected>GET</option>
-        <option value="put">PUT</option>
-        <option value="delete">DELETE</option>
-      </select>
-    </div>
-
-    <div class="inputWrapper">
-      <div class="inputLabel">Timeout</div>
-      <select class="intval" name="timeoutSeconds">
-        <option value="1">1 second</option>
-        <option value="2">2 seconds</option>
-        <option value="3">3 seconds</option>
-        <option value="4">4 seconds</option>
-        <option value="5">5 seconds</option>
-      </select>
-    </div>
-
-
-    <div class="inputWrapper ctaWrapper">
-      <button type="submit" class="cta green">Create Order</button>
-    </div>
-  </form>
+            <div class="inputWrapper ctaWrapper">
+                <button type="submit" class="cta green">Create Order</button>
+            </div>
+    </form>
 </div>
