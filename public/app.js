@@ -413,75 +413,155 @@ app.loadAccountEditPage = function(){
 };
 
 // Load the dashboard page specifically
-app.loadOrdersListPage = function(){
-  // Get the email from the current token, or log the user out if none is there
-  var email = typeof(app.config.sessionToken.email) == 'string' ? app.config.sessionToken.email : false;
-  if(email){
-    // Fetch the user data
-    var queryStringObject = {
-      'email' : email
-    };
-    app.client.request(undefined,'api/users','GET',queryStringObject,undefined,function(statusCode,responsePayload){
-      if(statusCode == 200){
+/*
+app.loadOrdersListPage = function () {
+    // Get the email number from the current token, or log the user out if none is there
+    var email = typeof (app.config.sessionToken.email) == 'string' ? app.config.sessionToken.email : false;
+    if (email) {
+        // Fetch the user data
+        var queryStringObject = {
+            'email': email
+        };
+        window.alert('HIT!' + Date.now().toString());
+        //Get user's order
+        app.client.request(undefined, 'api/orders', 'GET', queryStringObject, undefined, function (statusCode, responsePayload) {
+            if (statusCode == 200) {
 
-        // Determine how many orders the user has
-        var allOrders = typeof(responsePayload.orders) == 'object' && responsePayload.orders instanceof Array && responsePayload.orders.length > 0 ? responsePayload.orders : [];
+              
+                // Determine how many orders the user has
+                //Array of {'orderId':number, 'items':[{'pizzaId','amount','pizzaName','price','totalPrice'}], 'paid':boolean}
+                const allOrders = Array.isArray(responsePayload) && responsePayload.length > 0 ? responsePayload : [];
+                const data = Date.now();
+               
+                if (allOrders.length > 0) {
 
-        if(allOrders.length > 0){
+                    // Show each created order as a new row in the table
+                    allOrders.forEach(function (element) {
+                        // Get the data for the order
+                        var newQueryStringObject = {
+                            'id': element.orderId
+                        };
+                       
+                        
+                                var pizzaData = element.items[0];
+                                // Make the order data into a table row
+                                var table = document.getElementById("ordersListTable");
+                                var tr = table.insertRow(-1);
+                                tr.classList.add('orderRow');
+                                var td0 = tr.insertCell(0);
+                                var td1 = tr.insertCell(1);
+                                var td2 = tr.insertCell(2);
+                                var td3 = tr.insertCell(3);
+                                var td4 = tr.insertCell(4);
+                        td0.innerHTML = allOrders.length;//pizzaData.pizzaName;
+                        td1.innerHTML = allOrders.length;//pizzaData.price;
+                        td2.innerHTML = allOrders.length;//pizzaData.amount;
+                        var state = typeof (element.paid) == 'boolean' ? (element.paid ? 'paid' : 'unpaid') : 'unknown';
+                                td3.innerHTML = state;
+                                td4.innerHTML = '<a href="/orders/edit?id=' + orderId + '">View / Edit / Delete</a>';
+                           
+                      
+                    });
 
-          // Show each created order as a new row in the table
-          allOrders.forEach(function(orderId){
-            // Get the data for the order
-            var newQueryStringObject = {
-              'id' : orderId
-            };
-            app.client.request(undefined,'api/orders','GET',newQueryStringObject,undefined,function(statusCode,responsePayload){
-                if (statusCode == 200) {
-                var orderData = responsePayload;
-                // Make the order data into a table row
-                var table = document.getElementById("ordersListTable");
-                var tr = table.insertRow(-1);
-                tr.classList.add('orderRow');
-                var td0 = tr.insertCell(0);
-                var td1 = tr.insertCell(1);
-                var td2 = tr.insertCell(2);
-                var td3 = tr.insertCell(3);
-                var td4 = tr.insertCell(4);
-                td0.innerHTML = responsePayload.method.toUpperCase();
-                td1.innerHTML = responsePayload.protocol+'://';
-                td2.innerHTML = responsePayload.url;
-                var state = typeof(responsePayload.state) == 'string' ? responsePayload.state : 'unknown';
-                td3.innerHTML = state;
-                td4.innerHTML = '<a href="/orders/edit?id='+responsePayload.id+'">View / Edit / Delete</a>';
-              } else {
-                console.log("Error trying to load order ID: ",orderId);
-              }
-            });
-          });
+                    if (allOrders.length < 5) {
 
-          if(allOrders.length < 5){
-            // Show the createOrder CTA
-            document.getElementById("createOrderCTA").style.display = 'block';
-          }
+                        console.log('allOrders length:', allOrders.length);
+                        // Show the createOrder CTA
+                        document.getElementById("createOrderCTA").style.display = 'block';
+                    }
 
-        } else {
-          // Show 'you have no orders' message
-          document.getElementById("noOrdersMessage").style.display = 'table-row';
+                    // Hide 'you have no orders' message
+                    document.getElementById("noOrdersMessage").style.display = 'none';
 
-          // Show the createOrder CTA
-          document.getElementById("createOrderCTA").style.display = 'block';
+                } else {
+ 
+                    // Show 'you have no orders' message
+                    document.getElementById("noOrdersMessage").style.display = 'table-row';
+               
+                    // Show the createOrder CTA
+                    document.getElementById("createOrderCTA").style.display = 'block';
 
-        }
-      } else {
-        // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
+                }
+            } else {
+                // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
+                app.logUserOut();
+            }
+        });
+    } else {
         app.logUserOut();
-      }
-    });
-  } else {
-    app.logUserOut();
-  }
+    }
 };
+*/
+// Load the dashboard page specifically
+app.loadOrdersListPage = function () {
+    // Get the email from the current token, or log the user out if none is there
+    var email = typeof (app.config.sessionToken.email) == 'string' ? app.config.sessionToken.email : false;
+    if (email) {
+        // Fetch the orders data
+        var queryStringObject = {
+            'email': email
+        };
+        app.client.request(undefined, 'api/orders', 'GET', queryStringObject, undefined, function (statusCode, responsePayload) {
+            if (statusCode == 200) {
 
+                // Determine how many orders the user has
+                //Array of {'orderId':number, 'items':[{'pizzaId','amount','pizzaName','price','totalPrice'}], 'paid':boolean}
+                var allOrders = Array.isArray(responsePayload) && responsePayload.length > 0 ? responsePayload : [];
+                if (allOrders.length > 0) {
+
+                    // Show each created order as a new row in the table
+                    allOrders.forEach(function (element) {
+                        // Get the data for the order
+                        var newQueryStringObject = {
+                            'id': element.orderId,
+                            'email': email
+                        };
+                        app.client.request(undefined, 'api/orders', 'GET', newQueryStringObject, undefined, function (statusCode, responsePayload) {
+                            if (statusCode == 200) {
+                                var orderData = responsePayload;
+                                // Make the order data into a table row
+                                var table = document.getElementById("ordersListTable");
+                                var tr = table.insertRow(-1);
+                                tr.classList.add('orderRow');
+                                var td0 = tr.insertCell(0);
+                                var td1 = tr.insertCell(1);
+                                var td2 = tr.insertCell(2);
+                                var td3 = tr.insertCell(3);
+                                var td4 = tr.insertCell(4);
+                                td0.innerHTML = element.pizzaName;
+                                td1.innerHTML = responsePayload.protocol + '://';
+                                td2.innerHTML = responsePayload.url;
+                                var state = typeof (responsePayload.state) == 'string' ? responsePayload.state : 'unknown';
+                                td3.innerHTML = state;
+                                td4.innerHTML = '<a href="/orders/edit?id=' + responsePayload.id + '">View / Edit / Delete</a>';
+                            } else {
+                                console.log("Error trying to load order ID: ", element.orderId);
+                            }
+                        });
+                    });
+
+                    if (allOrders.length < 5) {
+                        // Show the createOrder CTA
+                        document.getElementById("createOrderCTA").style.display = 'block';
+                    }
+
+                } else {
+                    // Show 'you have no orders' message
+                    document.getElementById("noOrdersMessage").style.display = 'table-row';
+
+                    // Show the createOrder CTA
+                    document.getElementById("createOrderCTA").style.display = 'block';
+
+                }
+            } else {
+                // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
+                app.logUserOut();
+            }
+        });
+    } else {
+        app.logUserOut();
+    }
+};
 
 // Load the orders edit page specifically
 app.loadOrdersEditPage = function(){
