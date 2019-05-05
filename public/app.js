@@ -7,7 +7,9 @@ var app = {};
 
 // Config
 app.config = {
-  'sessionToken' : false
+    'sessionToken': false,
+    'currencySign': '$',
+    'maxOrders' : 5
 };
 
 // AJAX Client (for RESTful API)
@@ -413,7 +415,7 @@ app.loadAccountEditPage = function(){
 };
 
 // Load the dashboard page specifically
-/*
+
 app.loadOrdersListPage = function () {
     // Get the email number from the current token, or log the user out if none is there
     var email = typeof (app.config.sessionToken.email) == 'string' ? app.config.sessionToken.email : false;
@@ -422,49 +424,54 @@ app.loadOrdersListPage = function () {
         var queryStringObject = {
             'email': email
         };
-        window.alert('HIT!' + Date.now().toString());
+  
         //Get user's order
-        app.client.request(undefined, 'api/orders', 'GET', queryStringObject, undefined, function (statusCode, responsePayload) {
+        app.client.request(undefined, 'api/users', 'GET', queryStringObject, undefined, function (statusCode, responsePayload) {
             if (statusCode == 200) {
 
-              
                 // Determine how many orders the user has
-                //Array of {'orderId':number, 'items':[{'pizzaId','amount','pizzaName','price','totalPrice'}], 'paid':boolean}
-                const allOrders = Array.isArray(responsePayload) && responsePayload.length > 0 ? responsePayload : [];
-                const data = Date.now();
-               
+                //Array of {'id':number, 'items':[{'pizzaId','amount','pizzaName','price','totalPrice'}], 'paid':boolean}
+                const allOrders = Array.isArray(responsePayload.orders) && responsePayload.orders.length > 0 ? responsePayload.orders : [];
+
                 if (allOrders.length > 0) {
 
                     // Show each created order as a new row in the table
-                    allOrders.forEach(function (element) {
+                    allOrders.forEach(function (orderId) {
                         // Get the data for the order
                         var newQueryStringObject = {
-                            'id': element.orderId
+                            'id': orderId
                         };
                        
-                        
-                                var pizzaData = element.items[0];
+                        //Read the order file
+                        app.client.request(undefined, 'api/orders', 'GET', newQueryStringObject, undefined, function (statusCode, responsePayload) {
+                            if (statusCode == 200) {
+                                var orderData = responsePayload;
+                              //  window.alert(JSON.stringify(responsePayload));
                                 // Make the order data into a table row
                                 var table = document.getElementById("ordersListTable");
                                 var tr = table.insertRow(-1);
                                 tr.classList.add('orderRow');
+
                                 var td0 = tr.insertCell(0);
                                 var td1 = tr.insertCell(1);
                                 var td2 = tr.insertCell(2);
                                 var td3 = tr.insertCell(3);
                                 var td4 = tr.insertCell(4);
-                        td0.innerHTML = allOrders.length;//pizzaData.pizzaName;
-                        td1.innerHTML = allOrders.length;//pizzaData.price;
-                        td2.innerHTML = allOrders.length;//pizzaData.amount;
-                        var state = typeof (element.paid) == 'boolean' ? (element.paid ? 'paid' : 'unpaid') : 'unknown';
-                                td3.innerHTML = state;
-                                td4.innerHTML = '<a href="/orders/edit?id=' + orderId + '">View / Edit / Delete</a>';
-                           
-                      
+
+                                td0.innerHTML = new Date(orderData.id).toLocaleString();
+                                td1.innerHTML = orderData.items.map(item => item.pizzaName + ' * ' + item.amount).join(', ');
+                                td2.innerHTML = orderData.totalPrice == undefined ? null : orderData.totalPrice.toFixed(2) + app.config.currencySign;
+                                td3.innerHTML = typeof (orderData.paid) == 'boolean' ? (orderData.paid ? 'paid' : 'unpaid') : 'unknown';
+                                td4.innerHTML = '<a href="/orders/edit?id=' + orderId + '">Purchase / Edit / Delete</a>';
+
+                            } else {
+                                console.log("Error trying to load order ID: ", orderId);
+                            }
+                        }); 
                     });
 
-                    if (allOrders.length < 5) {
-
+                    if (allOrders.length < app.config.maxOrders) {
+                        
                         console.log('allOrders length:', allOrders.length);
                         // Show the createOrder CTA
                         document.getElementById("createOrderCTA").style.display = 'block';
@@ -491,108 +498,10 @@ app.loadOrdersListPage = function () {
         app.logUserOut();
     }
 };
-*/
-// Load the dashboard page specifically
-app.loadOrdersListPage = function () {
-    // Get the email from the current token, or log the user out if none is there
-    var email = typeof (app.config.sessionToken.email) == 'string' ? app.config.sessionToken.email : false;
-    if (email) {
-        // Fetch the orders data
-        var queryStringObject = {
-            'email': email
-        };
-        app.client.request(undefined, 'api/orders', 'GET', queryStringObject, undefined, function (statusCode, responsePayload) {
-            if (statusCode == 200) {
-
-                // Determine how many orders the user has
-                //Array of {'orderId':number, 'items':[{'pizzaId','amount','pizzaName','price','totalPrice'}], 'paid':boolean}
-                var allOrders = Array.isArray(responsePayload) && responsePayload.length > 0 ? responsePayload : [];
-                if (allOrders.length > 0) {
-
-                    // Show each created order as a new row in the table
-                    allOrders.forEach(function (element) {
-                        // Get the data for the order
-                        var newQueryStringObject = {
-                            'id': element.orderId,
-                            'email': email
-                        };
-                        app.client.request(undefined, 'api/orders', 'GET', newQueryStringObject, undefined, function (statusCode, responsePayload) {
-                            if (statusCode == 200) {
-                                var orderData = responsePayload;
-
-                                // Make the order data into a table row
-                                var table = document.getElementById("ordersListTable");
-                                var tr = table.insertRow(-1);
-                                tr.classList.add('orderRow');
-
-                                var td0 = tr.insertCell(0);
-                                var td1 = tr.insertCell(1);
-                                var td2 = tr.insertCell(2);
-                                var td3 = tr.insertCell(3);
-                                var td4 = tr.insertCell(4);
-
-                                td0.innerHTML = new Date(element.orderId).toLocaleString();
-                                td1.innerHTML = element.items.map(item => item.pizzaName + ' * ' + item.amount).join(', ');
-                                td2.innerHTML = element.totalPrice == undefined ? null : element.totalPrice;
-                                td3.innerHTML = typeof (element.paid) == 'boolean' ? (element.paid ? 'paid' : 'unpaid') : 'unknown';
-                                td4.innerHTML = '<a href="/orders/edit?id=' + responsePayload.id + '">View / Edit / Delete</a>';
-
-                            } else {
-                                console.log("Error trying to load order ID: ", element.orderId);
-                            }
-                        });
-                    });
-
-                    if (allOrders.length < 5) {
-                        // Show the createOrder CTA
-                        document.getElementById("createOrderCTA").style.display = 'block';
-                    }
-
-                } else {
-                    // Show 'you have no orders' message
-                    document.getElementById("noOrdersMessage").style.display = 'table-row';
-
-                    // Show the createOrder CTA
-                    document.getElementById("createOrderCTA").style.display = 'block';
-
-                }
-            } else {
-                // If the request comes back as something other than 200, log the user our (on the assumption that the api is temporarily down or the users token is bad)
-                app.logUserOut();
-            }
-        });
-    } else {
-        app.logUserOut();
-    }
-};
-
-app.tableCreate = function (orderData) {
-
-    var body = document.getElementsByTagName('body')[0];
-    var tbl = document.createElement('table');
-    tbl.style.width = '100%';
-    tbl.setAttribute('border', '1');
-    var tbdy = document.createElement('tbody');
-    for (var i = 0; i < 3; i++) {
-        var tr = document.createElement('tr');
-        for (var j = 0; j < 2; j++) {
-            if (i == 2 && j == 1) {
-                break
-            } else {
-                var td = document.createElement('td');
-                td.appendChild(document.createTextNode('\u0020'))
-                i == 1 && j == 1 ? td.setAttribute('rowSpan', '2') : null;
-                tr.appendChild(td)
-            }
-        }
-        tbdy.appendChild(tr);
-    }
-    tbl.appendChild(tbdy);
-    body.appendChild(tbl)
-}
 
 // Load the orders edit page specifically
-app.loadOrdersEditPage = function(){
+app.loadOrdersEditPage = function () {
+
   // Get the order id from the query string, if none is found then redirect back to dashboard
   var id = typeof(window.location.href.split('=')[1]) == 'string' && window.location.href.split('=')[1].length > 0 ? window.location.href.split('=')[1] : false;
   if(id){
@@ -605,7 +514,7 @@ app.loadOrdersEditPage = function(){
 
         // Put the hidden id field into both forms
         var hiddenIdInputs = document.querySelectorAll("input.hiddenIdInput");
-        for(var i = 0; i < hiddenIdInputs.length; i++){
+          for (var i = 0; i < hiddenIdInputs.length; i++){
             hiddenIdInputs[i].value = responsePayload.id;
         }
 
@@ -617,11 +526,11 @@ app.loadOrdersEditPage = function(){
         document.querySelector("#ordersEdit1 .methodInput").value = responsePayload.method;
         document.querySelector("#ordersEdit1 .timeoutInput").value = responsePayload.timeoutSeconds;
         var successCodeOrderboxes = document.querySelectorAll("#ordersEdit1 input.successCodesInput");
-        for(var i = 0; i < successCodeOrderboxes.length; i++){
+        /*for(var i = 0; i < successCodeOrderboxes.length; i++){
           if(responsePayload.successCodes.indexOf(parseInt(successCodeOrderboxes[i].value)) > -1){
             successCodeOrderboxes[i].ordered = true;
           }
-        }
+        }*/
       } else {
         // If the request comes back as something other than 200, redirect back to dashboard
         window.location = '/orders/all';
