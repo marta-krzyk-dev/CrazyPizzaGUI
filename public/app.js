@@ -157,10 +157,6 @@ app.bindForms = function(){
                     if (nameOfElement == '_method') {
                         method = valueOfElement;
                     } else {
-                        // Create an payload field named "method" if the elements name is actually httpmethod
-                        if (nameOfElement == 'httpmethod') {
-                            nameOfElement = 'method';
-                        }
                         // Create an payload field named "id" if the elements name is actually uid
                         if (nameOfElement == 'uid') {
                             nameOfElement = 'id';
@@ -174,7 +170,6 @@ app.bindForms = function(){
                         } else {
                             payload[nameOfElement] = valueOfElement;
                         }
-
                     }
                 }
             }
@@ -216,9 +211,9 @@ app.bindForms = function(){
   }
 };
 
-// Form response processor
+// Form response processor - redirect the user depending on action taken
 app.formResponseProcessor = function(formId,requestPayload,responsePayload){
-  var functionToCall = false;
+ 
   // If account creation was successful, try to immediately log the user in
   if(formId == 'accountCreate'){
     // Take the email and password, and use it to log the user in
@@ -274,9 +269,8 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
 
     // If the user just purchased an order, deactivate the "purchase" button
     if (formId == 'purchase') {
-       // document.getElementById("purchaseButton").style.display = 'none';
-
-        // Hide all credit card inputs
+ 
+        // Hide all credit card inputs and purchase button
         var hiddenWrappers = document.querySelectorAll(".inputWrapper");
         console.log("oto i one :", JSON.stringify(hiddenWrappers));
         for (var i = 0; i < hiddenWrappers.length; i++) {
