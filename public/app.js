@@ -7,9 +7,7 @@ var app = {};
 
 // Config
 app.config = {
-    'sessionToken': false,
-    'currencySign': '$',
-    'maxOrders' : 5
+    'sessionToken': false
 };
 
 // AJAX Client (for RESTful API)
@@ -148,33 +146,38 @@ app.bindForms = function(){
         // Turn the inputs into a payload
         var payload = {};
         var elements = this.elements;
-        for(var i = 0; i < elements.length; i++){
-          if(elements[i].type !== 'submit'){
-            // Determine class of element and set value accordingly
-            var classOfElement = typeof(elements[i].classList.value) == 'string' && elements[i].classList.value.length > 0 ? elements[i].classList.value : '';
-            var valueOfElement = elements[i].type == 'checkbox' && classOfElement.indexOf('multiselect') == -1 ? elements[i].ordered : classOfElement.indexOf('intval') == -1 ? elements[i].value : parseInt(elements[i].value);
-            var elementIsOrdered = elements[i].ordered;
-            // Override the method of the form if the input's name is _method
-            var nameOfElement = elements[i].name;
-            if(nameOfElement == '_method'){
-              method = valueOfElement;
-            } else {
-              // Create an payload field named "id" if the elements name is actually uid
-              if(nameOfElement == 'uid'){
-                nameOfElement = 'id';
-              }
-              // If the element has the class "multiselect" add its value(s) as array elements
-              if(classOfElement.indexOf('multiselect') > -1){
-                if(elementIsOrdered){
-                  payload[nameOfElement] = typeof(payload[nameOfElement]) == 'object' && payload[nameOfElement] instanceof Array ? payload[nameOfElement] : [];
-                  payload[nameOfElement].push(valueOfElement);
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i].type !== 'submit') {
+                    // Determine class of element and set value accordingly
+                    var classOfElement = typeof (elements[i].classList.value) == 'string' && elements[i].classList.value.length > 0 ? elements[i].classList.value : '';
+                    var valueOfElement = elements[i].type == 'checkbox' && classOfElement.indexOf('multiselect') == -1 ? elements[i].checked : classOfElement.indexOf('intval') == -1 ? elements[i].value : parseInt(elements[i].value);
+                    var elementIsChecked = elements[i].checked;
+                    // Override the method of the form if the input's name is _method
+                    var nameOfElement = elements[i].name;
+                    if (nameOfElement == '_method') {
+                        method = valueOfElement;
+                    } else {
+                        // Create an payload field named "method" if the elements name is actually httpmethod
+                        if (nameOfElement == 'httpmethod') {
+                            nameOfElement = 'method';
+                        }
+                        // Create an payload field named "id" if the elements name is actually uid
+                        if (nameOfElement == 'uid') {
+                            nameOfElement = 'id';
+                        }
+                        // If the element has the class "multiselect" add its value(s) as array elements
+                        if (classOfElement.indexOf('multiselect') > -1) {
+                            if (elementIsChecked) {
+                                payload[nameOfElement] = typeof (payload[nameOfElement]) == 'object' && payload[nameOfElement] instanceof Array ? payload[nameOfElement] : [];
+                                payload[nameOfElement].push(valueOfElement);
+                            }
+                        } else {
+                            payload[nameOfElement] = valueOfElement;
+                        }
+
+                    }
                 }
-              } else {
-                payload[nameOfElement] = valueOfElement;
-              }
             }
-          }
-        }
 
         // If the method is DELETE, the payload should be a queryStringObject instead
         var queryStringObject = method == 'DELETE' ? payload : {};
@@ -271,7 +274,14 @@ app.formResponseProcessor = function(formId,requestPayload,responsePayload){
 
     // If the user just purchased an order, deactivate the "purchase" button
     if (formId == 'purchase') {
-        document.getElementById("purchaseButton").style.display = 'none';
+       // document.getElementById("purchaseButton").style.display = 'none';
+
+        // Hide all credit card inputs
+        var hiddenWrappers = document.querySelectorAll(".inputWrapper");
+        console.log("oto i one :", JSON.stringify(hiddenWrappers));
+        for (var i = 0; i < hiddenWrappers.length; i++) {
+           hiddenWrappers[i].style.display = 'none';
+        }
     }
 };
 
@@ -472,7 +482,7 @@ app.loadOrdersListPage = function () {
                         
                                // td0.innerHTML = new Date(orderData.id).toLocaleString();
                                 td1.innerHTML = orderData.pizzaName + ' * ' + orderData.amount;
-                                td2.innerHTML = orderData.totalPrice == undefined ? null : orderData.totalPrice.toFixed(2) + app.config.currencySign;
+                                td2.innerHTML = orderData.totalPrice == undefined ? null : orderData.totalPrice.toFixed(2) + '$';
                                 td3.innerHTML = '<a class="backButton" href="/orders/edit?id=' + orderId + '">Edit / Delete</a>';
                                 td4.innerHTML = '<a class="backButton" href="/purchase?id=' + orderId + '">Purchase</a>';
 
@@ -482,18 +492,17 @@ app.loadOrdersListPage = function () {
                         }); 
                     });
 
-                    if (orderCount < 5) {
+                    if (allOrders.length < 5) {
                         
-                        console.log('allOrders length:', allOrders.length);
                         // Show the createOrder CTA
                         document.getElementById("createOrderCTA").style.display = 'block';
-                    }
-                    if (orderCount > 4){
+                        document.getElementById("maxOrdersMessage").style.display = 'none';
 
+                    } else {
+
+                        document.getElementById("noOrdersMessage").style.display = 'none';
                         document.getElementById("maxOrdersMessage").style.display = 'block';
                     }
-                    // Hide 'you have no orders' message
-                    document.getElementById("noOrdersMessage").style.display = 'none';
 
                 } else {
  
@@ -540,7 +549,6 @@ app.loadOrdersEditPage = function () {
             console.log(document.querySelectorAll); 
             document.querySelector("#ordersEdit1 .displayIdInput").value = new Date(responsePayload.id).toLocaleString(); 
             document.querySelector("#ordersEdit1 .pizzaIdInput").selectedIndex = responsePayload.pizzaId - 1;
-          //@TODO select index safely
             document.querySelector("#ordersEdit1 .displayAmountInput").value = responsePayload.amount;
 
       } else {
@@ -570,7 +578,7 @@ app.loadPurchasePage = function () {
 
                 // Put the hidden id field into both forms
                 var hiddenIdInputs = document.querySelectorAll("input.hiddenIdInput");
-                console.log("oto i one :", JSON.stringify(hiddenIdInputs));
+              
                 for (var i = 0; i < hiddenIdInputs.length; i++) {
                     hiddenIdInputs[i].value = pizzaData.id;
                 }
@@ -578,10 +586,10 @@ app.loadPurchasePage = function () {
                 document.getElementById("description").innerText =
                 `You ordered
 
-${pizzaData.amount} * ${pizzaData.pizzaName} (${pizzaData.price.toFixed(2)}${app.config.currencySign})
+${pizzaData.amount} * ${pizzaData.pizzaName} (${pizzaData.price.toFixed(2)}$)
 ---
 
-Total: ${pizzaData.totalPrice.toFixed(2)}${app.config.currencySign}`;
+Total: ${pizzaData.totalPrice.toFixed(2)}$`;
 
             } else {
                 // If the request comes back as something other than 200, redirect back to dashboard
