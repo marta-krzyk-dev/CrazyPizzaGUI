@@ -76,4 +76,4 @@ You can change your first and last name, address and password. When ready, click
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/14_CrazyPizza_Tokens_DELETE_log_out.png?raw=true)
 
 ## JSON routes
-[JSON Routes](https://github.com/marta-krzyk-dev/CrazyPizzaGUI.wiki.git)
+[JSON Routes](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/wiki/JSON-Routes)
