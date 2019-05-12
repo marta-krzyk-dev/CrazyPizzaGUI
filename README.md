@@ -74,3 +74,6 @@ You can change your first and last name, address and password. When ready, click
 
 14. To log out, choose "**Logout**" from the menu in the upper right corner.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/14_CrazyPizza_Tokens_DELETE_log_out.png?raw=true)
+
+## JSON routes
+[JSON Routes](https://github.com/marta-krzyk-dev/CrazyPizzaGUI.wiki.git)
