@@ -13,7 +13,7 @@ var config = require('./lib/config');
 var app = {};
 
 // Init function
-app.init = function(){
+app.init = function () {
 
     //Create data directories
     _data.createDirectoryIfNotExist(''); //Create 'data' base directory
@@ -21,17 +21,16 @@ app.init = function(){
     _data.createDirectoryIfNotExist(config.ordersFolder);
     _data.createDirectoryIfNotExist(config.tokensFolder);
 
-  // Start the server
-  server.init();
+    // Start the server
+    server.init();
 
-  // Start the workers
-  workers.init();
+    // Start the workers
+    workers.init();
 
 };
 
 // Self executing
 app.init();
-
 
 // Export the app
 module.exports = app;

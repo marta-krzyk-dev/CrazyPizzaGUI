@@ -610,7 +610,7 @@ app.init = function () {
     // Bind all form submissions
     app.bindForms();
 
-    // Bind logout logout button
+    // Bind logout button
     app.bindLogoutButton();
 
     // Fetch the token from local storage
