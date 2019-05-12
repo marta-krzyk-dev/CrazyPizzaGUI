@@ -47,7 +47,7 @@ Follow the Basic scenario below to learn how to navigate on the website.
 3. You will be redirected to your shopping cart. For now, it's empty.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/3_CrazyPizza_ShoppingCart_GET_noOrderes.png?raw=true)
 
-4. A) Create the first order by clicking "Create order". Choose whichever pizza you like from dropdown and choose the amount (1-10). Submit by hitting "Create order". You can create up to 5 orders.
+4. Create the first order by clicking "Create order". Choose whichever pizza you like from dropdown and choose the amount (1-10). Submit by hitting "Create order". You can create up to 5 orders.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/4_CrazyPizza_ShoppingCart_POST_create_an_order.png?raw=true)
 
 5. You will be redirected to your shopping cart. You can now edit the order with "Edit/Delete" button.
