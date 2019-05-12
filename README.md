@@ -18,14 +18,17 @@ This project is a frontend website that inteacts with JSON RESTful API free of 3
 `cd C:/CrazyPizzaGUI`
 2. Run the app:
 `node index.js`
+
 Optionally, one can set the environment as command line argument (with value of 'production' or 'staging'). The default is 'staging'.
+
 `node index.js production` (for Windows)
 `NODE_ENV=production node index.js` (for Linux)
+
 Optionally, one cat set DEBUG variable to print out messages in the console.
 `set DEBUG=* & node index.js` (for Windows)
 
 3. The app informs which ports are active.
-4. Open up a web browser and go to the address printed out in point 3: localhost:3000 or localhost:5000. 
+4. Open up a web browser and go to the address printed out in point 3: `localhost:3000` or `localhost:5000`. 
 Follow the Basic scenario below to learn how to navigate on the website.
 5. Push `Ctrl` + `C` in the console to stop the app.
 
