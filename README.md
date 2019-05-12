@@ -30,10 +30,4 @@ Follow the Basic scenario below to learn how to navigate on the website.
 5. Push `Ctrl` + `C` in the console to stop the app.
 
 ### Basic scenario:
-1. Create a user. (`USERS`, `POST`)
-2. Log in. (`TOKENS`, `POST`)
-3. View menu. (`MENU`, `GET`)
-4. Order a pizza. (`SHOPPINGCART`, `POST`)
-5. Pay for the order. (`PURCHASE`, `POST`)
-6. Check email for a receipt.
-7. Log out. (`TOKENS`, `DELETE`)
+https://github.com/marta-krzyk-dev/CrazyPizzaGUI.wiki.git
