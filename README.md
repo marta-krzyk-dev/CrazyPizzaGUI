@@ -38,10 +38,10 @@ Follow the Basic scenario below to learn how to navigate on the website.
 1. Go to the main page.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/1_CrazyPizza_index_GET.png?raw=true)
 
-2. A) Click on "Get started" and create an account.
+2. Click on "Get started" and create an account.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/2_CrazyPizza_Users_POST_create_an_account.png?raw=true)
 
-2. B) If you already have an account, click on "Login" to enter your email and password.
+3. If you already have an account, click on "Login" to enter your email and password.
 ![](https://github.com/marta-krzyk-dev/CrazyPizzaGUI/blob/master/PrintScreens/2B_CrazyPizza_Tokens_POST_log_in.png?raw=true)
 
 3. You will be redirected to your shopping cart. For now, it's empty.
