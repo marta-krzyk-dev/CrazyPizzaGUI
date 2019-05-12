@@ -25,6 +25,7 @@ Optionally, one can set the environment as command line argument (with value of 
 `NODE_ENV=production node index.js` (for Linux)
 
 Optionally, one cat set DEBUG variable to print out messages in the console.
+
 `set DEBUG=* & node index.js` (for Windows)
 
 3. The app informs which ports are active.
