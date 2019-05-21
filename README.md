@@ -6,7 +6,7 @@ This project is a frontend website that inteacts with JSON RESTful API free of 3
 
 ## Screencast
 
-[See the app in action and see the code explained line by line](https://www.youtube.com/watch?v=IeMzHuGOyEU&t=695s)
+[See the app in action and watch the code being explained line by line](https://www.youtube.com/watch?v=IeMzHuGOyEU&t=695s)
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=IeMzHuGOyEU
 " target="_blank"><img src="http://img.youtube.com/vi/IeMzHuGOyEU/0.jpg" 
