@@ -2,10 +2,16 @@
 3rd homework assignment for [Pirple's NodeJS master class](https://pirple.thinkific.com/courses/the-nodejs-master-class).
 This project is a frontend website that inteacts with JSON RESTful API free of 3rd-party dependencies for a pizza-delivery company utilizing Stripe and MailGun external services.
 
+![Logo](https://github.com/marta-krzyk-dev/CrazyPizzaAPI/blob/master/logo_small.jpg?raw=true)
+
+## Screencast
+
 [**Screencast** - see the app in action + code explanation](https://www.youtube.com/watch?v=IeMzHuGOyEU&t=695s)
 [![uuu](http://img.youtube.com/vi/IeMzHuGOyEU/0.jpg)](http://www.youtube.com/watch?v=IeMzHuGOyEU)
 
-![Logo](https://github.com/marta-krzyk-dev/CrazyPizzaAPI/blob/master/logo_small.jpg?raw=true)
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=IeMzHuGOyEU
+" target="_blank"><img src="http://img.youtube.com/vi/IeMzHuGOyEU/0.jpg" 
+alt="Pirple Node JS Master Class Homework Assignment #3" width="240" height="180" border="10" /></a>
 
 ## Features
 - [x] Signup, login, logout on the site
