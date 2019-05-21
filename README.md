@@ -3,7 +3,6 @@
 This project is a frontend website that inteacts with JSON RESTful API free of 3rd-party dependencies for a pizza-delivery company utilizing Stripe and MailGun external services.
 
 [**Screencast** - see the app in action + code explanation](https://www.youtube.com/watch?v=IeMzHuGOyEU&t=695s)
-![Screencast](https://img.youtube.com/vi/v=IeMzHuGOyEU&t=695s/0.jpg)(https://www.youtube.com/watch?v=IeMzHuGOyEU&t=695s)
 
 ![Logo](https://github.com/marta-krzyk-dev/CrazyPizzaAPI/blob/master/logo_small.jpg?raw=true)
 
